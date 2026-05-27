@@ -5,18 +5,16 @@ import { Map } from '../components/Map';
 import mockData from '../mockData.json';
 import { Chart } from '../components/Chart';
 export function Dashboard() {
-  return (
-    <div className="container mx-auto p-8">
-      <h1 className="text-4xl font-bold mb-8">SOC Dashboard</h1>
+return (
+  <div className="min-h-screen bg-slate-950 text-white p-8">
+    <div className="container mx-auto">
+      <h1 className="text-4xl font-bold mb-8 text-blue-400">SOC Dashboard</h1>
       
-      {/* KPI Cards showing numbers */}
       <KPICards data={mockData.kpis} />
-      
-      {/* Table of recent alerts */}
       <AlertTable alerts={mockData.alerts} />
       <Chart data={mockData.chartData} />
-      {/* Map placeholder */}
-      <Map data={mockData.mapData} />
+      <Map />
     </div>
-  );
+  </div>
+);
 }
