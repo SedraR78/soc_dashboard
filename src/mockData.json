@@ -46,5 +46,32 @@
       "severity": "medium",
       "status": "Investigating"
     }
-  ]
+  ],
+
+"chartData": [
+  {"hour": "00:00", "attacks": 5},
+  {"hour": "01:00", "attacks": 8},
+  {"hour": "02:00", "attacks": 3},
+  {"hour": "03:00", "attacks": 12},
+  {"hour": "04:00", "attacks": 7},
+  {"hour": "05:00", "attacks": 4},
+  {"hour": "06:00", "attacks": 6},
+  {"hour": "07:00", "attacks": 15},
+  {"hour": "08:00", "attacks": 18},
+  {"hour": "09:00", "attacks": 22},
+  {"hour": "10:00", "attacks": 19},
+  {"hour": "11:00", "attacks": 25},
+  {"hour": "12:00", "attacks": 20},
+  {"hour": "13:00", "attacks": 16},
+  {"hour": "14:00", "attacks": 14},
+  {"hour": "15:00", "attacks": 11},
+  {"hour": "16:00", "attacks": 13},
+  {"hour": "17:00", "attacks": 9},
+  {"hour": "18:00", "attacks": 8},
+  {"hour": "19:00", "attacks": 10},
+  {"hour": "20:00", "attacks": 12},
+  {"hour": "21:00", "attacks": 7},
+  {"hour": "22:00", "attacks": 6},
+  {"hour": "23:00", "attacks": 4}
+]
 }

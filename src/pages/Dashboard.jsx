@@ -3,7 +3,7 @@ import { KPICards } from '../components/KPICards';
 import { AlertTable } from '../components/AlertTable';
 import { Map } from '../components/Map';
 import mockData from '../mockData.json';
-
+import { Chart } from '../components/Chart';
 export function Dashboard() {
   return (
     <div className="container mx-auto p-8">
@@ -14,7 +14,7 @@ export function Dashboard() {
       
       {/* Table of recent alerts */}
       <AlertTable alerts={mockData.alerts} />
-      
+      <Chart data={mockData.chartData} />
       {/* Map placeholder */}
       <Map />
     </div>
