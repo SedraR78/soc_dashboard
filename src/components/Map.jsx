@@ -1,9 +1,19 @@
 export function Map() {
   return (
-    <div className="mt-8 p-8">
-      <h2 className="text-2xl font-bold mb-4">Attack Locations Worldwide</h2>
-      <div className="w-full h-96 bg-gray-300 rounded border border-gray-400 flex items-center justify-center">
-        <p className="text-gray-600">Map coming soon (Leaflet integration in Phase 5)</p>
+    <div style={{ marginTop: '32px', padding: '32px' }}>
+      <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', color: 'white' }}>Attack Locations Worldwide</h2>
+      
+      <div style={{
+        width: '100%',
+        height: '400px',
+        backgroundColor: '#1f2937',
+        borderRadius: '8px',
+        border: '1px solid #4b5563',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <p style={{ color: '#9ca3af', fontSize: '18px' }}>🗺️ Map coming soon (Leaflet in Phase 5 - WIP)</p>
       </div>
     </div>
   );

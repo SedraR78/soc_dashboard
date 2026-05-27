@@ -13,7 +13,7 @@ return (
       <KPICards data={mockData.kpis} />
       <AlertTable alerts={mockData.alerts} />
       <Chart data={mockData.chartData} />
-      <Map />
+      <Map data={mockData.mapData} />
     </div>
   </div>
 );
