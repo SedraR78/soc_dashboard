@@ -16,7 +16,7 @@ export function Dashboard() {
       <AlertTable alerts={mockData.alerts} />
       <Chart data={mockData.chartData} />
       {/* Map placeholder */}
-      <Map />
+      <Map data={mockData.mapData} />
     </div>
   );
 }
