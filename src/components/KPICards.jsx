@@ -1,41 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export function KPICards({ data }) {
-  const cardStyle = {
+  const [hoveredCard, setHoveredCard] = useState(null);
+
+  const cardStyle = (color, isHovered) => ({
     padding: '24px',
     borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-    textAlign: 'left'
-  };
+    border: `2px solid ${color}`,
+    backgroundColor: 'rgba(10, 14, 39, 0.7)',
+    boxShadow: isHovered ? `0 0 30px ${color}` : `0 0 10px ${color}`,
+    transition: 'all 0.3s ease',
+    cursor: 'pointer',
+    transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+  });
 
-  const redCard = { ...cardStyle, backgroundColor: '#ef4444', color: 'white' }; 
-  const orangeCard = { ...cardStyle, backgroundColor: '#f97316', color: 'white' };
-  const yellowCard = { ...cardStyle, backgroundColor: '#eab308', color: 'white' };
-  const blueCard = { ...cardStyle, backgroundColor: '#3b82f6', color: 'white' };
+  const cards = [
+    { color: '#00ff41', label: 'Failed Logins', value: data.failedLogins },
+    { color: '#ff6b00', label: 'Suspicious IPs', value: data.suspiciousIPs },
+    { color: '#ffff00', label: 'Attacks Detected', value: data.attacksDetected },
+    { color: '#00d4ff', label: 'Last Updated', value: data.lastUpdated }
+  ];
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', marginBottom: '32px' }}>
-      
-      <div style={redCard}>
-        <p style={{ fontSize: '14px', marginBottom: '8px' }}>Failed Logins</p>
-        <p style={{ fontSize: '36px', fontWeight: 'bold' }}>{data.failedLogins}</p>
-      </div>
-
-      <div style={orangeCard}>
-        <p style={{ fontSize: '14px', marginBottom: '8px' }}>Suspicious IPs</p>
-        <p style={{ fontSize: '36px', fontWeight: 'bold' }}>{data.suspiciousIPs}</p>
-      </div>
-
-      <div style={yellowCard}>
-        <p style={{ fontSize: '14px', marginBottom: '8px' }}>Attacks Detected</p>
-        <p style={{ fontSize: '36px', fontWeight: 'bold' }}>{data.attacksDetected}</p>
-      </div>
-
-      <div style={blueCard}>
-        <p style={{ fontSize: '14px', marginBottom: '8px' }}>Last Updated</p>
-        <p style={{ fontSize: '20px', fontWeight: 'bold' }}>{data.lastUpdated}</p>
-      </div>
-
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+      gap: '20px',
+      marginBottom: '32px'
+    }}>
+      {cards.map((card, i) => (
+        <div
+          key={i}
+          onMouseEnter={() => setHoveredCard(i)}
+          onMouseLeave={() => setHoveredCard(null)}
+          style={cardStyle(card.color, hoveredCard === i)}
+        >
+          <p style={{
+            fontSize: '14px',
+            color: card.color,
+            marginBottom: '8px',
+            letterSpacing: '1px',
+            textTransform: 'uppercase'
+          }}>
+            {card.label}
+          </p>
+          <p style={{
+            fontSize: 'clamp(28px, 5vw, 48px)',
+            fontWeight: 'bold',
+            color: card.color,
+            textShadow: `0 0 10px ${card.color}`,
+            margin: 0
+          }}>
+            {card.value}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }

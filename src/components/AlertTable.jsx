@@ -1,81 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export function AlertTable({ alerts }) {
-  const getSeverityStyle = (severity) => {
+  const [hoveredAlert, setHoveredAlert] = useState(null);
+
+  const getSeverityColor = (severity) => {
     switch(severity.toLowerCase()) {
-      case 'critical':
-        return {
-          backgroundColor: '#dc2626',
-          borderLeft: '4px solid #991b1b',
-          color: 'white'
-        };
-      case 'high':
-        return {
-          backgroundColor: '#ea580c',
-          borderLeft: '4px solid #9a3412',
-          color: 'white'
-        };
-      case 'medium':
-        return {
-          backgroundColor: '#ca8a04',
-          borderLeft: '4px solid #78350f',
-          color: 'white'
-        };
-      case 'low':
-        return {
-          backgroundColor: '#16a34a',
-          borderLeft: '4px solid #15803d',
-          color: 'white'
-        };
-      default:
-        return {
-          backgroundColor: '#4b5563',
-          borderLeft: '4px solid #1f2937',
-          color: 'white'
-        };
+      case 'critical': return '#ff0000';
+      case 'high': return '#ff6b00';
+      case 'medium': return '#ffff00';
+      case 'low': return '#00ff41';
+      default: return '#00d4ff';
     }
   };
 
   return (
-    <div style={{ marginTop: '32px', padding: '32px' }}>
-      <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px', color: 'white' }}>Recent Alerts</h2>
+    <div style={{ marginTop: '32px', marginBottom: '32px' }}>
+      <h2 style={{
+        fontSize: 'clamp(20px, 4vw, 28px)',
+        fontWeight: 'bold',
+        marginBottom: '16px',
+        color: '#00ff41',
+        letterSpacing: '1px'
+      }}>
+        ▶ RECENT ALERTS
+      </h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {alerts.map((alert) => (
-          <div 
-            key={alert.id} 
-            style={{
-              ...getSeverityStyle(alert.severity),
-              padding: '16px',
-              borderRadius: '8px',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
-              gap: '16px',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-            }}
-          >
-            <div>
-              <p style={{ fontSize: '12px', color: '#e5e7eb', marginBottom: '4px' }}>TIME</p>
-              <p style={{ fontWeight: 'bold' }}>{alert.timestamp}</p>
+        {alerts.map((alert, i) => {
+          const color = getSeverityColor(alert.severity);
+          const isHovered = hoveredAlert === i;
+          
+          return (
+            <div
+              key={alert.id}
+              onMouseEnter={() => setHoveredAlert(i)}
+              onMouseLeave={() => setHoveredAlert(null)}
+              style={{
+                padding: '16px',
+                borderLeft: `4px solid ${color}`,
+                backgroundColor: 'rgba(10, 14, 39, 0.7)',
+                border: `1px solid ${color}`,
+                borderRadius: '4px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                gap: '16px',
+                boxShadow: isHovered ? `0 0 20px ${color}` : `0 0 5px ${color}`,
+                transition: 'all 0.3s ease',
+                transform: isHovered ? 'translateX(10px)' : 'translateX(0)',
+                color: color
+              }}
+            >
+              <div>
+                <p style={{ fontSize: '12px', color: '#888', marginBottom: '4px', textTransform: 'uppercase' }}>TIME</p>
+                <p style={{ fontSize: '16px', fontWeight: 'bold', margin: 0 }}>{alert.timestamp}</p>
+              </div>
+              <div>
+                <p style={{ fontSize: '12px', color: '#888', marginBottom: '4px', textTransform: 'uppercase' }}>TYPE</p>
+                <p style={{ fontSize: '16px', fontWeight: 'bold', margin: 0 }}>{alert.type}</p>
+              </div>
+              <div>
+                <p style={{ fontSize: '12px', color: '#888', marginBottom: '4px', textTransform: 'uppercase' }}>IP</p>
+                <p style={{ fontSize: '16px', fontWeight: 'bold', fontFamily: 'monospace', margin: 0 }}>{alert.sourceIP}</p>
+              </div>
+              <div>
+                <p style={{ fontSize: '12px', color: '#888', marginBottom: '4px', textTransform: 'uppercase' }}>SEVERITY</p>
+                <p style={{ fontSize: '16px', fontWeight: 'bold', margin: 0, textTransform: 'uppercase' }}>{alert.severity}</p>
+              </div>
+              <div>
+                <p style={{ fontSize: '12px', color: '#888', marginBottom: '4px', textTransform: 'uppercase' }}>STATUS</p>
+                <p style={{ fontSize: '16px', fontWeight: 'bold', margin: 0 }}>{alert.status}</p>
+              </div>
             </div>
-            <div>
-              <p style={{ fontSize: '12px', color: '#e5e7eb', marginBottom: '4px' }}>TYPE</p>
-              <p style={{ fontWeight: 'bold' }}>{alert.type}</p>
-            </div>
-            <div>
-              <p style={{ fontSize: '12px', color: '#e5e7eb', marginBottom: '4px' }}>SOURCE IP</p>
-              <p style={{ fontWeight: 'bold', fontFamily: 'monospace' }}>{alert.sourceIP}</p>
-            </div>
-            <div>
-              <p style={{ fontSize: '12px', color: '#e5e7eb', marginBottom: '4px' }}>SEVERITY</p>
-              <p style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>{alert.severity}</p>
-            </div>
-            <div>
-              <p style={{ fontSize: '12px', color: '#e5e7eb', marginBottom: '4px' }}>STATUS</p>
-              <p style={{ fontWeight: 'bold' }}>{alert.status}</p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
