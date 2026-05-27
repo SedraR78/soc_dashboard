@@ -1,0 +1,50 @@
+{
+  "kpis": {
+    "failedLogins": 45,
+    "suspiciousIPs": 12,
+    "attacksDetected": 8,
+    "lastUpdated": "2 hours ago"
+  },
+  "alerts": [
+    {
+      "id": 1,
+      "timestamp": "2026-05-25 14:32:00",
+      "type": "SSH Brute Force",
+      "sourceIP": "192.168.1.105",
+      "severity": "high",
+      "status": "Active"
+    },
+    {
+      "id": 2,
+      "timestamp": "2026-05-25 14:15:30",
+      "type": "Port Scan",
+      "sourceIP": "192.168.1.106",
+      "severity": "medium",
+      "status": "Investigating"
+    },
+    {
+      "id": 3,
+      "timestamp": "2026-05-25 13:48:15",
+      "type": "SQL Injection",
+      "sourceIP": "203.0.113.45",
+      "severity": "critical",
+      "status": "Blocked"
+    },
+    {
+      "id": 4,
+      "timestamp": "2026-05-25 13:20:00",
+      "type": "Suspicious HTTP",
+      "sourceIP": "192.168.1.107",
+      "severity": "low",
+      "status": "Monitoring"
+    },
+    {
+      "id": 5,
+      "timestamp": "2026-05-25 12:45:45",
+      "type": "Port Scan",
+      "sourceIP": "192.168.1.108",
+      "severity": "medium",
+      "status": "Investigating"
+    }
+  ]
+}
