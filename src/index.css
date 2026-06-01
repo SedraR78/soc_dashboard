@@ -1,37 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 body {
   margin: 0;
-  font-family: 'IBM Plex Mono', monospace;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #0a0e27 0%, #0f1729 100%);
-  color: #00ff41;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f1f5f9;
 }
 
 #root {
-  background: linear-gradient(135deg, #0a0e27 0%, #0f1729 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   min-height: 100vh;
 }
-
-/* Matrix glow effect */
-@keyframes glow {
-  0%, 100% { text-shadow: 0 0 10px #00ff41; }
-  50% { text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41; }
-}
-
-@keyframes borderGlow {
-  0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.6); }
-}
-
-.glow-text {
-  animation: glow 2s ease-in-out infinite;
-}
-
-.glow-border {
-  animation: borderGlow 2s ease-in-out infinite;
-}
-
