@@ -3,62 +3,47 @@ class RedTeamService {
     this.idsService = idsService;
   }
 
-  simulateSSHBrute(targetIP = '203.0.113.42') {
-    const generatedIncidents = [];
-    for (let i = 0; i < 3; i++) {
-      generatedIncidents.push({
-        id: this.idsService.incidents.length + generatedIncidents.length + 1,
-        timestamp: new Date().toISOString(),
-        attackType: 'SSH Brute Force',
-        sourceIP: targetIP,
-        targetResource: 'SSH:22',
-        severity: 'high',
-        status: 'open',
-        detectedBy: 'RED_TEAM_SIM',
-        description: `[SIM] 25 tentatives SSH échouées de ${targetIP}`
-      });
+  simulateAttack(attackType) {
+    console.log('🎯 Simulating attack:', attackType);
+    
+    let description = '';
+    let incidents = 3;
+
+    if (attackType === 'ssh') {
+      description = 'SSH Brute Force attack simulation - 25 login attempts detected';
+      incidents = 3;
+    } else if (attackType === 'portscan') {
+      description = 'Port Scan detected on network - 6 ports scanned';
+      incidents = 1;
+    } else if (attackType === 'sqli') {
+      description = 'SQL Injection attack detected on login endpoint';
+      incidents = 2;
+    } else if (attackType === 'ddos') {
+      description = 'DDoS attack simulation - server flooded with requests';
+      incidents = 4;
     }
-    this.idsService.incidents.unshift(...generatedIncidents);
-    return {
-      type: 'SSH Brute Force',
-      simulatedIP: targetIP,
-      logsGenerated: 25,
-      incidentsCreated: generatedIncidents.length,
-      detectionRate: 100
-    };
-  }
 
-  simulatePortScan(targetIP = '203.0.113.42') {
-    const ports = [22, 80, 443, 3306, 8080, 9000];
-    const incident = {
-      id: this.idsService.incidents.length + 1,
-      timestamp: new Date().toISOString(),
-      attackType: 'Port Scan',
-      sourceIP: targetIP,
-      targetResource: `Multiple Ports (${ports.join(', ')})`,
-      severity: 'medium',
-      status: 'open',
-      detectedBy: 'RED_TEAM_SIM',
-      description: `[SIM] Scan de ${ports.length} ports détecté`
-    };
-    this.idsService.incidents.unshift(incident);
-    return {
-      type: 'Port Scan',
-      simulatedIP: targetIP,
-      portsScanned: ports.length,
-      detectionRate: 100
-    };
-  }
+    // Log incidents to IDS if available
+    if (this.idsService && this.idsService.incidents) {
+      for (let i = 0; i < incidents; i++) {
+        this.idsService.incidents.push({
+          id: this.idsService.incidents.length + 1,
+          timestamp: new Date().toISOString(),
+          attackType: attackType,
+          sourceIP: '203.0.113.' + (40 + i),
+          severity: i === 0 ? 'critical' : 'high',
+          status: 'open',
+          description: description
+        });
+      }
+    }
 
-  simulate(attackType, targetIP = '203.0.113.42') {
-    let result;
-    if (attackType === 'ssh') result = this.simulateSSHBrute(targetIP);
-    else if (attackType === 'portscan') result = this.simulatePortScan(targetIP);
-    else result = this.simulateSSHBrute(targetIP);
     return {
-      simulationId: `SIM-${Date.now()}`,
+      simulationId: `SIM-${Date.now()}${Math.floor(Math.random() * 1000000)}`,
+      attackType: attackType,
+      detectionRate: 100,
+      incidentsCreated: incidents,
       status: 'completed',
-      ...result,
       timestamp: new Date().toISOString()
     };
   }

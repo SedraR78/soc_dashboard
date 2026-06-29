@@ -1,18 +1,24 @@
-const authMiddleware = (authService) => {
+module.exports = (authService) => {
   return (req, res, next) => {
     try {
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ error: 'Token manquant' });
+      const authHeader = req.headers['authorization'];
+      console.log('📍 AUTH HEADER:', authHeader ? '✅ YES' : '❌ NO');
+      console.log('🔐 authService available:', authService ? '✅ YES' : '❌ NO');
+
+      if (!authHeader) {
+        return res.status(401).json({ error: 'No token provided' });
       }
-      const token = authHeader.substring(7);
+
+      const token = authHeader.replace('Bearer ', '');
+      console.log('🎫 Token to verify:', token.substring(0, 50) + '...');
+
       const decoded = authService.verifyToken(token);
       req.user = decoded;
+      console.log('✅ TOKEN VERIFIED:', decoded.email);
       next();
     } catch (err) {
-      res.status(401).json({ error: 'Token invalide ou expiré' });
+      console.error('❌ AUTH ERROR:', err.message);
+      res.status(401).json({ error: 'Invalid token' });
     }
   };
 };
-
-module.exports = authMiddleware;

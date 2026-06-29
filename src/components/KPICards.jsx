@@ -3,11 +3,22 @@ import React, { useState } from 'react';
 export function KPICards({ data }) {
   const [hoveredCard, setHoveredCard] = useState(null);
 
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return 'Never';
+    return new Date(timestamp).toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).replace(',', '');
+  };
+
   const cards = [
     { color: '#3b82f6', label: 'Failed Logins', value: data.failedLogins },
     { color: '#f59e0b', label: 'Suspicious IPs', value: data.suspiciousIPs },
     { color: '#ef4444', label: 'Attacks Detected', value: data.attacksDetected },
-    { color: '#10b981', label: 'Last Updated', value: data.lastUpdated }
+    { color: '#10b981', label: 'Last Updated', value: formatTimestamp(data.lastUpdated) }
   ];
 
   return (

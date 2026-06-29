@@ -7,10 +7,20 @@ export function AlertTable({ alerts }) {
     const colors = {
       'critical': '#ef4444',
       'high': '#f59e0b',
-      'medium': '#eab308',
+      'medium': '#0ea5e9',
       'low': '#10b981'
     };
     return colors[severity.toLowerCase()] || '#3b82f6';
+  };
+
+  const formatTimestamp = (timestamp) => {
+    return new Date(timestamp).toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).replace(',', '');
   };
 
   return (
@@ -41,7 +51,7 @@ export function AlertTable({ alerts }) {
                 backgroundColor: 'rgba(30, 41, 59, 0.5)',
                 borderRadius: '8px',
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
                 gap: '16px',
                 transition: 'all 0.3s ease',
                 transform: isHovered ? 'translateX(4px)' : 'translateX(0)',
@@ -50,7 +60,7 @@ export function AlertTable({ alerts }) {
             >
               <div>
                 <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 4px 0', fontWeight: '600' }}>TIME</p>
-                <p style={{ fontSize: '14px', fontWeight: '500', color: '#f1f5f9', margin: 0 }}>{alert.timestamp}</p>
+                <p style={{ fontSize: '12px', fontWeight: '500', color: '#f1f5f9', margin: 0, wordBreak: 'break-word' }}>{formatTimestamp(alert.timestamp)}</p>
               </div>
               <div>
                 <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 4px 0', fontWeight: '600' }}>TYPE</p>
@@ -58,7 +68,7 @@ export function AlertTable({ alerts }) {
               </div>
               <div>
                 <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 4px 0', fontWeight: '600' }}>SOURCE IP</p>
-                <p style={{ fontSize: '14px', fontWeight: '500', fontFamily: 'monospace', color: color, margin: 0 }}>{alert.sourceIP}</p>
+                <p style={{ fontSize: '12px', fontWeight: '500', fontFamily: 'monospace', color: color, margin: 0 }}>{alert.sourceIP}</p>
               </div>
               <div>
                 <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 4px 0', fontWeight: '600' }}>SEVERITY</p>
