@@ -1,13 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 const db = require('./db');
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
 const AuthService = require('./services/AuthService');
 const IDSService = require('./services/IDSService');
 const ThreatAnalysisService = require('./services/ThreatAnalysisService');
-const RedTeamService = require('./services/RedTeamService');
 const ReportService = require('./services/ReportService');
 const TerminalService = require('./services/TerminalService');
 const authMiddleware = require('./middleware/authMiddleware');
@@ -23,38 +21,14 @@ const app = express();
 const PORT = process.env.PORT || 8001;
 const JWT_SECRET = process.env.JWT_SECRET || 'holberton_soc_secret_2026';
 
-console.log('🔐 JWT_SECRET in server.js:', JWT_SECRET ? '✅ YES' : '❌ NO');
-console.log('🔌 PORT:', PORT);
-
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: { title: 'SOC Dashboard API', version: '1.0.0', description: 'Cyber Threat Intelligence Dashboard API' },
-    servers: [{ url: `http://localhost:${PORT}`, description: 'Development' }],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
-      }
-    }
-  },
-  apis: ['./backend/routes/*.js']
-};
-
-const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(morgan('dev'));
 
 const authService = new AuthService(JWT_SECRET);
 const idsService = new IDSService();
 const threatAnalysisService = new ThreatAnalysisService(idsService);
-const redTeamService = new RedTeamService(idsService);
 const reportService = new ReportService(threatAnalysisService, idsService);
 const terminalService = new TerminalService(threatAnalysisService);
 
@@ -62,9 +36,9 @@ const authMW = authMiddleware(authService);
 
 app.use('/api/auth', authRoutes(authService));
 app.use('/api/dashboard', dashboardRoutes(db, authMW));
-app.use('/api/threats', threatsRoutes(db , authMW));
+app.use('/api/threats', threatsRoutes(threatAnalysisService, authMW));
 app.use('/api/ids', idsRoutes(db, authMW));
-app.use('/api/red-team', redteamRoutes(redTeamService, authMW));
+app.use('/api/red-team', redteamRoutes(db, authMW));
 app.use('/api/reports', reportRoutes(reportService, authMW));
 app.use('/api/terminal', terminalRoutes(terminalService, authMW));
 
@@ -73,5 +47,5 @@ app.get('/health', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🔥 SOC Backend running on http://localhost:${PORT}`);
+  console.log(`SOC Backend running on http://localhost:${PORT}`);
 });

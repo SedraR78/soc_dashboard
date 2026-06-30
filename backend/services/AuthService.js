@@ -5,22 +5,14 @@ const { User } = require('../models');
 class AuthService {
   constructor(jwtSecret) {
     this.jwtSecret = jwtSecret;
-    console.log('🔐 AuthService initialized with JWT_SECRET:', jwtSecret ? '✅ YES' : '❌ NO');
   }
 
   async login(email, password) {
     const user = await User.findByEmail(email);
-    
-    if (!user) {
-      console.log(`❌ User not found: ${email}`);
-      throw new Error('Utilisateur introuvable');
-    }
+    if (!user) throw new Error('Utilisateur introuvable');
 
     const validPassword = await bcryptjs.compare(password, user.password);
-    if (!validPassword) {
-      console.log(`❌ Wrong password for: ${email}`);
-      throw new Error('Mot de passe incorrect');
-    }
+    if (!validPassword) throw new Error('Mot de passe incorrect');
 
     const token = jwt.sign(
       { id: user.id, email: user.email, name: user.name },
@@ -29,16 +21,20 @@ class AuthService {
     );
 
     await User.updateLastLogin(user.id);
-    console.log(`🎉 LOGIN SUCCESS: ${email}`);
     return { token, expiresIn: 1800, user: { id: user.id, email: user.email, name: user.name, role: user.role } };
+  }
+
+  async register(email, password, name) {
+    const bcryptjs = require('bcryptjs');
+    const hashed = await bcryptjs.hash(password, 10);
+    const user = await User.create(email, hashed, name);
+    return { message: 'Utilisateur créé', user };
   }
 
   verifyToken(token) {
     try {
-      console.log('🔐 Verifying with JWT_SECRET:', this.jwtSecret ? '✅ YES' : '❌ NO');
       return jwt.verify(token, this.jwtSecret);
     } catch (err) {
-      console.error('❌ JWT VERIFY ERROR:', err.message);
       throw new Error('Token invalide ou expiré');
     }
   }
