@@ -61,9 +61,9 @@ const terminalService = new TerminalService(threatAnalysisService);
 const authMW = authMiddleware(authService);
 
 app.use('/api/auth', authRoutes(authService));
-app.use('/api/dashboard', dashboardRoutes(idsService, authMW));
-app.use('/api/threats', threatsRoutes(threatAnalysisService, authMW));
-app.use('/api/ids', idsRoutes(idsService, authMW));
+app.use('/api/dashboard', dashboardRoutes(db, authMW));
+app.use('/api/threats', threatsRoutes(db , authMW));
+app.use('/api/ids', idsRoutes(db, authMW));
 app.use('/api/red-team', redteamRoutes(redTeamService, authMW));
 app.use('/api/reports', reportRoutes(reportService, authMW));
 app.use('/api/terminal', terminalRoutes(terminalService, authMW));
